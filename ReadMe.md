@@ -111,18 +111,18 @@ Skip tests with certain tag:
 
 `--ui`: This flag launches the Playwright Test Runner in UI mode. This can be particularly useful for **debugging** and **visualizing test results**.
 
-<img src="./images/uiMode.png" width="550px"></img>
+<img src="./images/uiMode.png" width="650px"></img>
 
 ## Run Tests and Show Browsers
 
-<img src="./images/showBrowser.png" width="550px"></img>
+<img src="./images/showBrowser.png" width="650px"></img>
 
 You can also run your tests and show the browsers by selecting the option `Show Browsers` in the testing sidebar.
 Uncheck it if you prefer your tests to run in **headless mode**
 
 ## Run Tests on Specific Browsers
 
-<img src="./images/selectBrowser.png" width="550px"></img>
+<img src="./images/selectBrowser.png" width="600px"></img>
 
 The listed profiles are read from the `playwright.config` file
 
@@ -131,13 +131,13 @@ The listed profiles are read from the `playwright.config` file
 Running tests with the `Show Trace Viewer` option and step through each action of your tests. 
 **Source Code**
 
-<img src="./images/trace.png" width="550px"></img>
+<img src="./images/trace.png" width="650px"></img>
 
 ## Running tests in `debug mode`
 
 > playwright test --debug
 
-<img src="./images/debugMode.png" width="350px"></img>
+<img src="./images/debugMode.png" width="650px"></img>
 
 
   <br>
