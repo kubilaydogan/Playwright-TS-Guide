@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "npm run clean && playwright test && npm run report",
-    "mytest": "playwright test --project=chromium --headed tests/template.spec.ts",
+    "mytest": "playwright test --project=chromium --headed tests/login.spec.ts && npm run report",
     "test:tag": "playwright test --grep @API",
-    "test:testcase": "playwright test -g \"Login with Page Objects\"",
+    "test:testcase": "playwright test -g \"Login Test with page object\"",
     "test:ui": "playwright test --ui",
     "test:headed": "playwright test --headed",
     "test:chrome": "playwright test --project=chromium",
@@ -18,7 +18,7 @@
     "codegen": "playwright codegen",
     "codegen2": "playwright codegen saucedemo.com",
     "codegen3": "playwright codegen --device=\"iPhone 14\"",
-    "report": "playwright show-report",
+    "report": "playwright show-report html-report",
     "test:debug": "playwright test --debug",
     "test:debugStartingLine": "playwright test example.spec.ts:14 --debug",
     "clean": "rimraf playwright-report test-results results.json html-report"
@@ -28,7 +28,7 @@
   "license": "ISC",
   "devDependencies": {
     "@playwright/test": "^1.46.1",
-    "@types/node": "^22.5.0",
+    "@types/node": "^22.5.1",
     "dotenv": "^16.4.5",
     "rimraf": "^6.0.1"
   }
