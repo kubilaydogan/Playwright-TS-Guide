@@ -38,3 +38,7 @@ test('first', async ({ page }, testInfo) => {
 test('second', async ({ page }) => {
     // ...
 });
+
+test.only('third', async ({ page }) => {
+    // ...
+});
