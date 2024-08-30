@@ -1,37 +1,39 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../pages/LoginPage';
 
-test('Login test', async ({ page }) => {
-  await page.goto('https://the-internet.herokuapp.com/login');
-  await page.getByLabel('Username').fill('tomsmith');
-  await page.getByLabel('Password').fill('SuperSecretPassword!');
-  await page.getByRole('button', { name: 'Login' }).click();
+test.beforeEach(async ({ page }) => {
+  // await page.goto('https://www.saucedemo.com/');
 
-  await expect(page.locator('#flash')).toHaveText(/You logged into a secure area!/)
+  // const loginPage = new LoginPage(page)
+  // await loginPage.goToLoginPage();
+
+  await new LoginPage(page).goToLoginPage();
 });
 
-test.only('Login with Page Objects @pom', async ({ page }, testInfo) => {
-  const Login = new LoginPage(page)
-  await Login.goToLoginPage();
-  await Login.login('tomsmith', 'SuperSecretPassword!')
+test.skip('Login test without page object usage', async ({ page }) => {
+  await page.goto('https://www.saucedemo.com/');
+  await page.locator('[data-test="username"]').fill('standard_user');
+  await page.locator('[data-test="password"]').fill('secret_sauce');
+  await page.locator('[data-test="login-button"]').click();
 
-  await Login.verifyLoginMessage('You logged into a secure area!')
-  // or
-  await Login.verifySuccessfulLogin()
+  // logout
+  await page.getByRole('button', { name: 'Open Menu' }).click();
+  await page.locator('[data-test="logout-sidebar-link"]').click();
 });
 
-test('Login Test 2', async ({ page }) => {
-  // Navigate to the login page
-  await page.goto('https://example.com/login');
+test('Login Test with page object', async ({ page }) => {  
+  const loginPage = new LoginPage(page)
+  await loginPage.login('standard_user', 'secret_sauce');
 
-  // Fill in the login form
-  await page.fill('#username', 'myusername');
-  await page.fill('#password', 'mypassword');
+  await loginPage.verifySuccessfulLogin();    // option 1
+  await loginPage.verifyTitle('Products');    // option 2
 
-  // Submit the form
-  await page.click('#login-button');
+  await loginPage.logout();
+});
 
-  // Verify that the user is logged in
-  const loggedInUser = await page.textContent('.user-profile');
-  expect(loggedInUser).toBe('Welcome, myusername');
+test('should not be able to login with a invalid credentials', async ({ page }) => {
+  const loginPage = new LoginPage(page)
+  await loginPage.login('standard_user', 'invalidPassword');
+  await loginPage.verifyLoginFailMessage();
+  await page.waitForTimeout(3000);    // for demo purposes
 });
