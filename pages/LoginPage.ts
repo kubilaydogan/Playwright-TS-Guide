@@ -6,34 +6,50 @@ export class LoginPage {
     readonly PASSWORD_FIELD: Locator;
     readonly LOGIN_BUTTON: Locator;
     readonly LOGIN_MESSAGE_FIELD: Locator;
-    readonly LOGIN_SUCCESS_MESSAGE: RegExp;
+    readonly TITLE: Locator;
+    readonly LOGIN_FAILURE_MESSAGE: RegExp; 
+    readonly OPEN_MENU: Locator;
+    readonly LOGOUT_BUTTON: Locator;
 
-
-    constructor(page){
+    constructor(page: Page){
         this.page = page
-        this.USERNAME_FIELD = page.getByLabel('Username')
-        this.PASSWORD_FIELD = page.getByLabel('Password')
-        this.LOGIN_BUTTON = page.getByRole('button', {name: 'Login'})
-        this.LOGIN_MESSAGE_FIELD = page.locator('#flash')
-        this.LOGIN_SUCCESS_MESSAGE = /You logged into a secure area!/
+        this.USERNAME_FIELD = page.locator('[data-test="username"]')
+        this.PASSWORD_FIELD = page.locator('[data-test="password"]')
+        this.LOGIN_BUTTON = page.locator('[data-test="login-button"]')
+        this.LOGIN_MESSAGE_FIELD = page.locator('[data-test="error"]')
+        this.TITLE = page.locator('.title')
+        this.LOGIN_FAILURE_MESSAGE = /Username and password do not match any user in this service/ 
+        this.OPEN_MENU = page.getByRole('button', { name: 'Open Menu' })
+        this.LOGOUT_BUTTON = page.locator('[data-test="logout-sidebar-link"]')
     }
 
     async goToLoginPage(){
-        await this.page.goto('https://the-internet.herokuapp.com/login');
-    }
-    async login(username, password){
-        await this.USERNAME_FIELD.fill(username)
-        await this.PASSWORD_FIELD.fill(password)
-        await this.LOGIN_BUTTON.click()
-
+        await this.page.goto('https://www.saucedemo.com/');
     }
 
-    async verifyLoginMessage(text: string){
-        const actualMessage = await this.LOGIN_MESSAGE_FIELD.textContent();
-        expect(actualMessage).toContain(`${text}`); 
+    async login(username: string, password: string) {  
+        await this.USERNAME_FIELD.fill(username, { timeout: 5000 });
+        await this.PASSWORD_FIELD.fill(password, { timeout: 5000 });
+        await this.LOGIN_BUTTON.click();
     }
 
+    async logout() {  
+        await this.OPEN_MENU.click();
+        await this.LOGOUT_BUTTON.click();
+    }
+
+    async verifyTitle(text: string){
+        const title = await this.TITLE.textContent();
+        expect(title).toContain(`${text}`);
+    }
+    
     async verifySuccessfulLogin(){
-        await expect(this.LOGIN_MESSAGE_FIELD).toHaveText(this.LOGIN_SUCCESS_MESSAGE)
+        const title = await this.TITLE.textContent();
+        expect(title).toContain('Products');
+    }
+
+    async verifyLoginFailMessage(){
+        expect(this.LOGIN_MESSAGE_FIELD).toHaveText(this.LOGIN_FAILURE_MESSAGE)
+        expect(this.LOGIN_MESSAGE_FIELD).toHaveText('Epic sadface: Username and password do not match any user in this service');
     }
 }
