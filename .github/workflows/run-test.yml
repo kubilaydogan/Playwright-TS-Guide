@@ -1,4 +1,4 @@
-name: Playwright Tests
+name: run-tests-by-tag
 
 on:
     workflow_dispatch:
@@ -9,7 +9,7 @@ on:
           required: true
 
 concurrency:
-  group: "Playwright Tests-${{ github.ref }}"
+  group: "run-tests-by-tag-${{ github.ref }}"
   cancel-in-progress: true
 
 jobs:
