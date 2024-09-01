@@ -1,49 +1,46 @@
 import { test, expect } from '@playwright/test';
+import { LoginPage } from '../pages/LoginPage';
 
-test.describe('Test Suite (optional)', () => {
+test.describe('Positive tests', () => {
 
-    // test.beforeEach(async ({ page }) => {
-    //     await page.goto('https://playwright.dev/');
-    // })
+    const userName = process.env.USERNAME as string;
+    const password = process.env.PASSWORD as string;
 
-    // test.afterEach(async ({ page }) => {
-    //     await page.close();
-    // })
+    test.beforeEach(async ({ page }) => {
+        await new LoginPage(page).goToLoginPage();
+    });
 
-    test.beforeEach(async ({ page }, testInfo) => {
-        console.log(`Running ${testInfo.title}`);
+    test('@login Test with page object', async ({ page }) => {
+        const loginPage = new LoginPage(page)
+        await loginPage.login(userName, password);
+        await loginPage.verifySuccessfulLogin();
+    });
+
+    // to run this test separately, use the following command: 
+    // npx playwright test --grep "@demo"
+    test('playwright test @demo', async ({ page }) => {
         await page.goto('https://playwright.dev/');
-    });
-
-    test.afterEach(async ({ page }, testInfo) => {
-        await page.close();
-        console.log(`Finished ${testInfo.title} with status:  ${testInfo.status}`);
-
-        if (testInfo.status !== testInfo.expectedStatus)
-            console.log(`Did not run as expected, ended up at ${page.url()}`);
-    });
-
-    test.skip('skip the test', async ({ page }) => {
-
-    })
-
-    test.fixme('test to be fixed', async ({ page }) => {
-        // this test will also be skipped
-    })
-
-    test('test @login', async ({ page }) => {
-        // tag can be used in the title
-        // npx playwright test --grep "@login"
-        console.log('login tag used')
-    })
-
-    test('has title', async ({ page }) => {
         await expect(page).toHaveTitle(/Playwright/);
-    });
-
-    test.only('get started link', async ({ page }) => {
         await page.getByRole('link', { name: 'Get started' }).click();
+      
+        // Verify page header
         await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
+        await expect(page.locator('header h1')).toBeVisible();
+        await expect(page.locator('h1')).toHaveText('Installation');
+      });
+})
+
+
+test.describe('Negative tests', () => {
+
+    test.beforeEach(async ({ page }) => {
+        await new LoginPage(page).goToLoginPage();
     });
 
+    test('User should not be able to @login with a invalid credentials', async ({ page }) => {
+        const loginPage = new LoginPage(page)
+        await loginPage.login('standard_user', 'invalidPassword');
+        await loginPage.verifyLoginFailMessage();
+        await page.waitForTimeout(2000);    // for demo purposes
+    });
 })

@@ -36,6 +36,7 @@ export class LoginPage {
     async logout() {  
         await this.OPEN_MENU.click();
         await this.LOGOUT_BUTTON.click();
+        await this.LOGOUT_BUTTON.textContent
     }
 
     async verifyTitle(text: string){

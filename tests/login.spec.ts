@@ -2,13 +2,31 @@ import { test, expect } from '@playwright/test';
 import { LoginPage } from '../pages/LoginPage';
 
 test.beforeEach(async ({ page }) => {
-  // await page.goto('https://www.saucedemo.com/');
-
   // const loginPage = new LoginPage(page)
   // await loginPage.goToLoginPage();
 
   await new LoginPage(page).goToLoginPage();
 });
+
+test('Login Test with page object', async ({ page }) => {  
+  const loginPage = new LoginPage(page)
+  const userName = process.env.USERNAME as string;
+  const password = process.env.PASSWORD as string;
+  
+  await loginPage.login(userName, password);
+  await loginPage.verifySuccessfulLogin();    // option 1
+  await loginPage.verifyTitle('Products');    // option 2
+  await loginPage.logout();
+});
+
+test('should not be able to login with a invalid credentials', async ({ page }) => {
+  const loginPage = new LoginPage(page)
+  await loginPage.login('standard_user', 'invalidPassword');
+  await loginPage.verifyLoginFailMessage();
+  await page.waitForTimeout(3000);    // for demo purposes
+});
+
+
 
 test.skip('Login test without page object usage', async ({ page }) => {
   await page.goto('https://www.saucedemo.com/');
@@ -19,21 +37,4 @@ test.skip('Login test without page object usage', async ({ page }) => {
   // logout
   await page.getByRole('button', { name: 'Open Menu' }).click();
   await page.locator('[data-test="logout-sidebar-link"]').click();
-});
-
-test('Login Test with page object', async ({ page }) => {  
-  const loginPage = new LoginPage(page)
-  await loginPage.login('standard_user', 'secret_sauce');
-
-  await loginPage.verifySuccessfulLogin();    // option 1
-  await loginPage.verifyTitle('Products');    // option 2
-
-  await loginPage.logout();
-});
-
-test('should not be able to login with a invalid credentials', async ({ page }) => {
-  const loginPage = new LoginPage(page)
-  await loginPage.login('standard_user', 'invalidPassword');
-  await loginPage.verifyLoginFailMessage();
-  await page.waitForTimeout(3000);    // for demo purposes
 });

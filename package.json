@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "npm run clean && playwright test && npm run report",
-    "mytest": "playwright test --project=chromium --headed tests/login.spec.ts && npm run report",
+    "mytest": "playwright test --project=chromium --headed tests/api.spec.ts && npm run report",
     "test:tag": "playwright test --grep @API",
     "test:testcase": "playwright test -g \"Login Test with page object\"",
     "test:ui": "playwright test --ui",
