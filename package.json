@@ -4,7 +4,7 @@
   "description": "Playwright with TypeScript",
   "main": "index.js",
   "scripts": {
-    "test": "npm run clean && playwright test && npm run report",
+    "test": "playwright test",
     "mytest": "playwright test --project=chromium --headed tests/api.spec.ts && npm run report",
     "test:tag": "playwright test --grep @API",
     "test:testcase": "playwright test -g \"Login Test with page object\"",
