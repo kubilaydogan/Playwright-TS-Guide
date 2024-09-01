@@ -1,4 +1,4 @@
-name: Playwright Tests
+name: playwright-ci
 
 on: [push, pull_request]
 # on:
@@ -10,7 +10,7 @@ on: [push, pull_request]
 #       - main
 
 concurrency:
-  group: "Playwright Tests-${{ github.ref }}"
+  group: "playwright-ci-${{ github.ref }}"
   cancel-in-progress: true
 
 jobs:
